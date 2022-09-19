@@ -102,6 +102,9 @@ get-PCAPV:
 			./configure --with-pcap=linux && \
 			make
 
+build-only:
+	CGO_ENABLED=1 go build --ldflags "-L ./libpcap-$(PCAPV) -linkmode external -extldflags \"-static\"" -a -o bin/gor .
+
 dev-build-linux:
 	sudo apt-get install flex bison
 	make get-PCAPV
