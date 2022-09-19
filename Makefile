@@ -31,21 +31,6 @@ install:
 build:
 	docker build -t gor .
 
-get-PCAPV:
-	wget http://www.tcpdump.org/release/libpcap-$(PCAPV).tar.gz && \
-			tar xvf libpcap-$(PCAPV).tar.gz && \
-			rm -rf libpcap-$(PCAPV).tar.gz && \
-			cd libpcap-$(PCAPV) && \
-			./configure --with-pcap=linux && \
-			make
-
-exec-x64-linux:
-	CGO_ENABLED=1 GOOS=linux GOARCH=amd64 go build --ldflags "-L ./libpcap-$(PCAPV) -linkmode external -extldflags \"-static\"" -a -o gor .
-exec-arm-linux:
-	CGO_ENABLED=1 GOOS=linux GOARCH=arm go build --ldflags "-L ./libpcap-$(PCAPV) -linkmode external -extldflags \"-static\"" -a -o gor .
-
-
-
 profile:
 	go build && ./gor --output-http="http://localhost:9000" --input-dummy 0 --input-raw :9000 --input-http :9000 --memprofile=./mem.out --cpuprofile=./cpu.out --stats --output-http-stats --output-http-timeout 100ms
 
@@ -108,3 +93,26 @@ replay:
 
 bash:
 	$(RUN) /bin/bash
+
+get-PCAPV:
+	wget http://www.tcpdump.org/release/libpcap-$(PCAPV).tar.gz && \
+			tar xvf libpcap-$(PCAPV).tar.gz && \
+			rm -rf libpcap-$(PCAPV).tar.gz && \
+			cd libpcap-$(PCAPV) && \
+			./configure --with-pcap=linux && \
+			make
+
+dev-build-linux:
+	sudo apt-get install flex bison
+	make get-PCAPV
+
+dev-build-mac:
+	brew install flex bison
+	make get-PCAPV
+
+exec-x64-linux:
+	CGO_ENABLED=1 GOOS=linux GOARCH=amd64 go build --ldflags "-L ./libpcap-$(PCAPV) -linkmode external -extldflags \"-static\"" -a -o gor .
+exec-arm-linux:
+	CGO_ENABLED=1 GOOS=linux GOARCH=arm go build --ldflags "-L ./libpcap-$(PCAPV) -linkmode external -extldflags \"-static\"" -a -o gor .
+
+
