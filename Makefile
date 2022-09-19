@@ -106,7 +106,7 @@ build-only:
 	CGO_ENABLED=1 go build --ldflags "-L ./libpcap-$(PCAPV) -linkmode external -extldflags \"-static\"" -a -o bin/gor .
 
 dev-build-linux:
-	sudo apt-get install flex bison
+	sudo apt-get install flex bison libpcap-dev
 	make get-PCAPV
 
 dev-build-mac:
