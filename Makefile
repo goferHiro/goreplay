@@ -97,10 +97,7 @@ bash:
 get-PCAPV:
 	wget http://www.tcpdump.org/release/libpcap-$(PCAPV).tar.gz && \
 			tar xvf libpcap-$(PCAPV).tar.gz && \
-			rm -rf libpcap-$(PCAPV).tar.gz && \
-			cd libpcap-$(PCAPV) && \
-			./configure --with-pcap=linux && \
-			make
+			rm -rf libpcap-$(PCAPV).tar.gz
 
 build-only:
 	CGO_ENABLED=1 go build --ldflags "-L ./libpcap-$(PCAPV) -linkmode external -extldflags \"-static\"" -a -o bin/gor .
@@ -108,6 +105,9 @@ build-only:
 dev-build-linux:
 	sudo apt-get install flex bison libpcap-dev
 	make get-PCAPV
+	cd libpcap-$(PCAPV) && \
+				./configure --with-pcap=linux && \
+				sudo make
 
 dev-build-mac:
 	brew install flex bison
@@ -116,5 +116,8 @@ exec-x64-linux:
 	CGO_ENABLED=1 GOOS=linux GOARCH=amd64 go build --ldflags "-L ./libpcap-$(PCAPV) -linkmode external -extldflags \"-static\"" -a -o gor .
 exec-arm-linux:
 	CGO_ENABLED=1 GOOS=linux GOARCH=arm go build --ldflags "-L ./libpcap-$(PCAPV) -linkmode external -extldflags \"-static\"" -a -o gor .
+exec-mac-notworking:
+	CGO_ENABLED=1 go build --ldflags "-L /opt/homebrew/opt/libpcap/lib -linkmode external -extldflags \"-static\"" -a -o gor .
+
 
 
