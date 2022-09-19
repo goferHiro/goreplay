@@ -34,6 +34,7 @@ build:
 get-PCAPV:
 	wget http://www.tcpdump.org/release/libpcap-$(PCAPV).tar.gz && \
 			tar xvf libpcap-$(PCAPV).tar.gz && \
+			rm -rf libpcap-$(PCAPV).tar.gz && \
 			cd libpcap-$(PCAPV) && \
 			./configure --with-pcap=linux && \
 			make
