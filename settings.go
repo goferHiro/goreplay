@@ -4,11 +4,15 @@ import (
 	"flag"
 	"fmt"
 	"os"
+	"runtime"
 	"sync"
 	"time"
 )
 
-var VERSION string = "0.16.1-hypertest-arm"
+var VERSION = func() string {
+	version := fmt.Sprintf("0.16.1-hypertest-%s", runtime.GOARCH)
+	return version
+}()
 
 // MultiOption allows to specify multiple flags with same name and collects all values into array
 type MultiOption []string
