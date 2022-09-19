@@ -111,7 +111,6 @@ dev-build-linux:
 
 dev-build-mac:
 	brew install flex bison
-	make get-PCAPV
 
 exec-x64-linux:
 	CGO_ENABLED=1 GOOS=linux GOARCH=amd64 go build --ldflags "-L ./libpcap-$(PCAPV) -linkmode external -extldflags \"-static\"" -a -o gor .
