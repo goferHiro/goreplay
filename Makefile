@@ -9,6 +9,7 @@ VERSION = DEV-$(shell date +%s)
 LDFLAGS = -ldflags "-X main.VERSION=$(VERSION) -extldflags \"-static\""
 MAC_LDFLAGS = -ldflags "-X main.VERSION=$(VERSION)"
 FADDR = ":8000"
+PCAPV = 1.9.1
 
 release: release-x64 release-mac
 
@@ -29,6 +30,19 @@ install:
 
 build:
 	docker build -t gor .
+
+get-PCAPV:
+	wget http://www.tcpdump.org/release/libpcap-$(PCAPV).tar.gz && \
+			tar xvf libpcap-$(PCAPV).tar.gz && \
+			cd libpcap-$(PCAPV) && \
+			./configure --with-pcap=linux && \
+			make
+
+exec-x64-linux:
+	CGO_ENABLED=1 GOOS=linux GOARCH=amd64 go build --ldflags "-L ./libpcap-$(PCAPV) -linkmode external -extldflags \"-static\"" -a -o gor .
+exec-arm-linux:
+	CGO_ENABLED=1 GOOS=linux GOARCH=arm go build --ldflags "-L ./libpcap-$(PCAPV) -linkmode external -extldflags \"-static\"" -a -o gor .
+
 
 
 profile:
