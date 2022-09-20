@@ -107,9 +107,7 @@ dev-build-linux:
 	make get-PCAPV
 	cd libpcap-$(PCAPV) && \
 				./configure --with-pcap=linux && \
-				sudo make && \
-				rm -rf libpcap-$(PCAPV)
-
+				sudo make
 dev-build-mac:
 	brew install flex bison
 
