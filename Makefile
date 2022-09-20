@@ -121,4 +121,3 @@ exec-mac-notworking:
 	CGO_ENABLED=1 go build --ldflags "-L /opt/homebrew/opt/libpcap/lib -linkmode external -extldflags \"-static\"" -a -o gor .
 
 
-
